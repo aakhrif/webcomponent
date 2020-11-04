@@ -1,16 +1,28 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { ApplicationRef, CUSTOM_ELEMENTS_SCHEMA, DoBootstrap, Injector, NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
-import { AppComponent } from './app.component';
+import { createCustomElement } from '@angular/elements';
+import { CalculatorPopupComponent } from './calculator-popup/calculator-popup.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    CalculatorPopupComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule
   ],
+  entryComponents: [CalculatorPopupComponent],
   providers: [],
-  bootstrap: [AppComponent]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class AppModule { }
+export class AppModule implements DoBootstrap{
+  constructor(private injector: Injector) { }
+  
+  ngDoBootstrap(): void {
+    const customWebComponent = createCustomElement(CalculatorPopupComponent, {injector: this.injector});
+    // prevent customElements initiliaze component several times !!
+    if (!customElements.get('my-webcomponent')) customElements.define('my-webcomponent', customWebComponent);
+  }
+}

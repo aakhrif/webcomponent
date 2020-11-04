@@ -3,11 +3,16 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ng serve --aot --proxy-config proxy.json",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build": "ng build",
+    "build:prod": "ng build my-webcomponent --prod --configuration=production",
+    "package": "cat ./dist/my-webcomponent/*.js > elements/my-webcomponent.js",
+    "produce": "npm run build:prod && npm run package && npm run copy:to:mainproject",
+    "copy:to:ng-uni-app": "cp ./elements/my-webcomponent.js ../ng-uni-app/src/assets/js/my-webcomponent.js",
+    "produce:in:ng-uni-app": "npm run build:prod && npm run package && npm run copy:to:ng-uni-app"
   },
   "private": true,
   "dependencies": {
@@ -15,10 +20,13 @@
     "@angular/common": "~8.2.14",
     "@angular/compiler": "~8.2.14",
     "@angular/core": "~8.2.14",
+    "@angular/elements": "^8.2.14",
     "@angular/forms": "~8.2.14",
     "@angular/platform-browser": "~8.2.14",
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
+    "document-register-element": "^1.7.2",
+    "ngx-build-plus": "^9.0.4",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
